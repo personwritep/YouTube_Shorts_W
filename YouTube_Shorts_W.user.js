@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name        Shorts To Wide
+// @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
 // @version        0.1
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=youtube.com
-// @updateURL        https://github.com/personwritep/Shorts_To_Wide/raw/main/Shorts_To_Wide.user.js
-// @downloadURL        https://github.com/personwritep/Shorts_To_Wide/raw/main/Shorts_To_Wide.user.js
+// @updateURL        https://github.com/personwritep/YouTube_Shorts_W/raw/main/YouTube_Shorts_W.user.js
+// @downloadURL        https://github.com/personwritep/YouTube_Shorts_W/raw/main/YouTube_Shorts_W.user.js
 // @grant        none
 // ==/UserScript==
 
