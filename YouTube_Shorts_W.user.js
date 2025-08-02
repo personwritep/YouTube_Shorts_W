@@ -21,7 +21,7 @@ function changer(){
     let vpath=location.pathname;
 
     document.addEventListener('keydown', function(event){
-        if(event.keyCode=120){ // 「F9」の押下で切替
+        if(event.keyCode==120){ // 「F9」の押下で切替
             if(vpath.includes('/shorts/')){ // ショート動画の場合
                 to_wide(); }}});
 
