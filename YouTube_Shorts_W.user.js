@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
-// @version        0.1
+// @version        0.2
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
@@ -16,20 +16,32 @@ let target=document.querySelector('head');
 let monitor=new MutationObserver(changer);
 monitor.observe(target, { childList: true });
 
+changer();
 
 function changer(){
     let vpath=location.pathname;
+    let vhref=location.href;
 
     document.addEventListener('keydown', function(event){
         if(event.keyCode==120){ // 「F9」の押下で切替
             if(vpath.includes('/shorts/')){ // ショート動画の場合
-                to_wide(); }}});
+                to_wide(); }
+            else if(vhref.includes('/watch?v=')){ // 通状の動画の場合
+                to_shorts(); }}});
 
 
-        function to_wide(){
-            let vpath=location.pathname;
-            let svideo_id=vpath.split('/shorts/')[1];
-            let w_url='https://www.youtube.com/watch?v='+ svideo_id;
-            location.href=w_url; }
+    function to_wide(){
+        let vpath=location.pathname;
+        let svideo_id=vpath.split('/shorts/')[1];
+        let w_url='https://www.youtube.com/watch?v='+ svideo_id;
+        location.href=w_url; }
+
+
+    function to_shorts(){
+        let vhref=location.href;
+        let svideo_id=vhref.split('/watch?v=')[1];
+        let s_url='https://www.youtube.com/shorts/'+ svideo_id;
+        if(document.referrer==s_url){ // ショート動画から遷移した場合のみ戻れる
+            location.href=s_url; }}
 
 } // changer()
