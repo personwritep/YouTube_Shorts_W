@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
-// @version        0.2
+// @version        0.3
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
@@ -20,14 +20,36 @@ changer();
 
 function changer(){
     let vpath=location.pathname;
-    let vhref=location.href;
+    let video_elem;
 
-    document.addEventListener('keydown', function(event){
-        if(event.keyCode==120){ // 「F9」の押下で切替
-            if(vpath.includes('/shorts/')){ // ショート動画の場合
-                to_wide(); }
-            else if(vhref.includes('/watch?v=')){ // 通状の動画の場合
-                to_shorts(); }}});
+
+    if(vpath.includes('/shorts/')){
+        video_elem=document.querySelector('#shorts-player video');
+        if(video_elem){
+            document.addEventListener('keydown', function(event){
+                if(event.keyCode==120){ // 「F9」の押下で切替
+                    to_wide(); }
+                if(event.keyCode==37){ //「⇦」の押下
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    trim_back(video_elem); }
+                if(event.keyCode==39){ //「⇨」の押下
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    trim_next(video_elem); }});
+
+        } // if(video_elem)
+    } // if(vpath.includes('/shorts/'))
+
+    else{
+        video_elem=document.querySelector('#movie_player video');
+        if(video_elem){
+            document.addEventListener('keydown', function(event){
+                if(event.keyCode==120){ // 「F9」の押下で切替
+                    to_shorts(); }});
+
+        } // if(video_elem)
+    } // else
 
 
     function to_wide(){
@@ -43,5 +65,13 @@ function changer(){
         let s_url='https://www.youtube.com/shorts/'+ svideo_id;
         if(document.referrer==s_url){ // ショート動画から遷移した場合のみ戻れる
             location.href=s_url; }}
+
+
+    function trim_back(video_elem){ //「⇦」キー 2sec前へジャンプ
+        video_elem.currentTime -=2; }
+
+
+    function trim_next(video_elem){ //「⇨」キー 2sec後へジャンプ
+        video_elem.currentTime +=2; }
 
 } // changer()
