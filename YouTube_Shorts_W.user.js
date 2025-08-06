@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
-// @version        0.3
+// @version        0.4
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
@@ -12,7 +12,7 @@
 // ==/UserScript==
 
 
-let target=document.querySelector('head');
+let target=document.querySelector('head title');
 let monitor=new MutationObserver(changer);
 monitor.observe(target, { childList: true });
 
@@ -21,7 +21,6 @@ changer();
 function changer(){
     let vpath=location.pathname;
     let video_elem;
-
 
     if(vpath.includes('/shorts/')){
         video_elem=document.querySelector('#shorts-player video');
@@ -36,7 +35,11 @@ function changer(){
                 if(event.keyCode==39){ //「⇨」の押下
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    trim_next(video_elem); }});
+                    trim_next(video_elem); }
+                if(event.altKey){ //「Alt」キーの押下
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    slow(video_elem); }});
 
         } // if(video_elem)
     } // if(vpath.includes('/shorts/'))
@@ -73,5 +76,18 @@ function changer(){
 
     function trim_next(video_elem){ //「⇨」キー 2sec後へジャンプ
         video_elem.currentTime +=2; }
+
+
+    function slow(video_elem){
+        let skbar=document.querySelector('.ytPlayerProgressBarHost');
+        let speed=video_elem.playbackRate;
+        if(speed==1){
+            if(skbar){
+                skbar.style.filter='brightness(2)'; }
+            video_elem.playbackRate=0.5; }
+        else{
+            if(skbar){
+                skbar.style.filter=''; }
+            video_elem.playbackRate=1; }}
 
 } // changer()
