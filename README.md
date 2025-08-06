@@ -5,5 +5,5 @@ YouTube Shorts の動画再生画面で「F9」ボタンを押すと、
 <br>
 このツールの詳細は、以下のページを参照ください。<br>
 <br>
-https://ameblo.jp/personwritep/entry-12920145412.html
+https://ameblo.jp/personwritep/entry-12920705631.html
 
