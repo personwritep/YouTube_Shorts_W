@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
-// @version        0.4
+// @version        0.5
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
@@ -21,6 +21,13 @@ changer();
 function changer(){
     let vpath=location.pathname;
     let video_elem;
+    let skbar;
+
+    let rate=localStorage.getItem('YouTube_slowrate');
+    if(!rate){
+        rate=0.5;
+        localStorage.setItem('YouTube_slowrate', rate); }
+
 
     if(vpath.includes('/shorts/')){
         video_elem=document.querySelector('#shorts-player video');
@@ -28,14 +35,24 @@ function changer(){
             document.addEventListener('keydown', function(event){
                 if(event.keyCode==120){ // 「F9」の押下で切替
                     to_wide(); }
-                if(event.keyCode==37){ //「⇦」の押下
+                if(event.keyCode==37){ // 「⇦」の押下
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     trim_back(video_elem); }
-                if(event.keyCode==39){ //「⇨」の押下
+                if(event.keyCode==39){ // 「⇨」の押下
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     trim_next(video_elem); }
+                if(event.keyCode==49){ // 「1」の押下
+                    slow_set(video_elem, 1); }
+                if(event.keyCode==50){ // 「2」の押下
+                    slow_set(video_elem, 2); }
+                if(event.keyCode==51){ // 「3」の押下
+                    slow_set(video_elem, 3); }
+                if(event.keyCode==52){ // 「4」の押下
+                    slow_set(video_elem, 4); }
+                if(event.keyCode==53){ // 「5」の押下
+                    slow_set(video_elem, 5); }
                 if(event.altKey){ //「Alt」キーの押下
                     event.preventDefault();
                     event.stopImmediatePropagation();
@@ -78,13 +95,33 @@ function changer(){
         video_elem.currentTime +=2; }
 
 
+    function slow_set(video_elem, n){
+        if(n==1){
+            rate=0.1; }
+        else if(n==2){
+            rate=0.2; }
+        else if(n==3){
+            rate=0.3; }
+        else if(n==4){
+            rate=0.4; }
+        else if(n==5){
+            rate=0.5; }
+        else {
+            rate=0.5; }
+        localStorage.setItem('YouTube_slowrate', rate);
+        skbar=document.querySelector('.ytPlayerProgressBarHost');
+        if(skbar){
+            skbar.style.filter='brightness(2)'; }
+        video_elem.playbackRate=rate; }
+
+
     function slow(video_elem){
         let skbar=document.querySelector('.ytPlayerProgressBarHost');
         let speed=video_elem.playbackRate;
         if(speed==1){
             if(skbar){
                 skbar.style.filter='brightness(2)'; }
-            video_elem.playbackRate=0.5; }
+            video_elem.playbackRate=rate; }
         else{
             if(skbar){
                 skbar.style.filter=''; }
