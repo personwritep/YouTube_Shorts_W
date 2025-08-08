@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube Shorts W
 // @namespace        http://tampermonkey.net/
-// @version        0.5
+// @version        0.6
 // @description        ショート動画を全画面プレーヤーで閲覧する：ショートカット「F9」
 // @author        YouTube Watcher
 // @match        https://www.youtube.com/*
@@ -56,7 +56,12 @@ function changer(){
                 if(event.altKey){ //「Alt」キーの押下
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    slow(video_elem); }});
+                    slow(video_elem); }
+                if(event.keyCode==67){ //「c」の押下
+                    event.stopImmediatePropagation();
+                    caption(); }
+
+            });
 
         } // if(video_elem)
     } // if(vpath.includes('/shorts/'))
@@ -126,5 +131,22 @@ function changer(){
             if(skbar){
                 skbar.style.filter=''; }
             video_elem.playbackRate=1; }}
+
+
+    function caption(){
+        let w=document.querySelector('ytd-popup-container');
+        let b=document.querySelector('#button-shape button');
+        if(w && b){
+            w.style.opacity='0';
+            b.click();
+            setTimeout(()=>{
+                let options=document.querySelectorAll('.ytd-menu-navigation-item-renderer');
+                for(let k=0; k<options.length; k++){
+                    if(options[k].textContent=='字幕'){
+                        options[k].click();
+                        w.style.opacity='1'; }}
+            }, 20);
+        }}
+
 
 } // changer()
